@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <title>Planets</title>
+    <style>
+        #div-canvas {
+            position: relative;
+            margin-left: 10px;
+            margin-top: 10px;
+        }
+
+        #div-canvas canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="div-canvas">
+        <canvas id="sim" width="1000" height="800" tabindex='0'></canvas>
+    </div>
+</body>
+<script type="module">
+    import { SimController, Vector2 } from "./script/simulator.js"
+
+    console.log("aqui");
+    const sim = new SimController("sim", new Vector2());
+    sim.startSim();
+
+</script>
+
+</html>
