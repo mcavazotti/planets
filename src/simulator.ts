@@ -1,3 +1,3 @@
-export {SimController} from './simulator/sim-controller.js'
-export {Color} from './simulator/color.js'
-export {Vector2} from './simulator/vector.js'
+export {SimController} from './simulator/sim-controller'
+export {Color} from './simulator/color'
+export {Vector2} from './simulator/vector'

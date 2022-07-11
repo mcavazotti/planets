@@ -1,7 +1,7 @@
-import { Color } from "./color.js";
-import { Marker } from "./input.js";
-import { Planet } from "./planet.js";
-import { Vector2 } from "./vector.js";
+import { Color } from "./color";
+import { Marker } from "./input";
+import { Planet } from "./planet";
+import { Vector2 } from "./vector";
 export class Camera {
     position: Vector2;
     renderTrail: boolean = true;
@@ -24,6 +24,8 @@ export class Camera {
         this.position = position;
         this.canvasElement = element;
         this.canvasContext = this.canvasElement.getContext("2d")!;
+        this.renderUI = renderUi;
+        this.renderBg = renderBg;
 
         const pixelRatio = window.devicePixelRatio || 1;
         // this.canvasSize = new Vector2(pixelRatio * this.canvasElement.clientWidth, pixelRatio * this.canvasElement.clientHeight);
@@ -50,6 +52,7 @@ export class Camera {
 
     render(objects: Planet[], marker: Marker) {
         if (this.renderBg) {
+            console.log("renderBG")
             this.canvasContext.fillStyle = this.bgColor.hex;
             this.canvasContext.fillRect(0, 0, this.canvasSize.x, this.canvasSize.y);
         }

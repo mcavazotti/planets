@@ -1,16 +1,16 @@
-import { Camera } from "./camera.js";
-import { Color } from "./color.js";
-import { InputValues, Marker } from "./input.js";
-import { elasticCoefficient, gravitationalForce, randomInt } from "./math.js";
-import { Planet } from "./planet.js";
-import { SimData } from "./sim-data.js";
-import { Vector2 } from "./vector.js";
+import { Camera } from "./camera";
+import { Color } from "./color";
+import { InputValues, Marker } from "./input";
+import { elasticCoefficient, gravitationalForce, randomInt } from "./math";
+import { Planet } from "./planet";
+import { SimData } from "./sim-data";
+import { Vector2 } from "./vector";
 
 export class SimController {
     simRunning: boolean = false;
     targetFps: number = 120;
     realFps: number = 0;
-    minimumFps:number = 36;
+    minimumFps: number = 36;
     objects: Set<Planet>;
     maxTrailLength: number = 300;
     canvas: HTMLCanvasElement;
@@ -47,15 +47,15 @@ export class SimController {
         step: 5000
     }
 
-    constructor(id: string, cameraPosition: Vector2) {
+    constructor(id: string, cameraPosition: Vector2, renderUi: boolean = true, renderBg: boolean = true) {
         this.canvas = document.getElementById(id)! as HTMLCanvasElement;
         this.objects = new Set();
         this.cameraStartingPos = cameraPosition;
-        this.camera = new Camera(this.canvas, this.cameraStartingPos);
+        this.camera = new Camera(this.canvas, this.cameraStartingPos, renderUi, renderBg);
         console.log("cam init")
 
         this.resetSim();
-        this.camera.render(Array.from(this.objects),this.markerData);
+        this.camera.render(Array.from(this.objects), this.markerData);
 
         this.canvas.addEventListener('mousemove', this.getMousePosition.bind(this));
         this.canvas.addEventListener('mousedown', this.getMouseDown.bind(this));
@@ -65,6 +65,8 @@ export class SimController {
         this.canvas.addEventListener('keydown', this.getKeyDown.bind(this));
         this.canvas.addEventListener('keyup', this.getKeyUp.bind(this));
         this.canvas.addEventListener("wheel", this.handleScroll.bind(this));
+        this.canvas.addEventListener("mouseenter", () => {this.camera.renderUI = true;});
+        this.canvas.addEventListener("mouseleave", () => {this.camera.renderUI = false;});
 
     }
 
@@ -190,10 +192,10 @@ export class SimController {
                 var curTimestamp = performance.now();
                 this.realFps = 1000 / (curTimestamp - lastTimestamp);
                 lastTimestamp = curTimestamp;
-    
+
                 if (this.realFps < this.minimumFps) {
                     var iterations = Math.round(this.minimumFps / this.realFps)
-                    console.log(this.realFps, iterations);
+                    // console.log(this.realFps, iterations);
                     for (let i = 0; i < iterations; i++) {
                         this.updateObjects(this.minimumFps);
                     }
@@ -202,7 +204,7 @@ export class SimController {
                     this.updateObjects();
                 }
                 this.camera.clear();
-                this.camera.render(Array.from(this.objects),this.markerData);
+                this.camera.render(Array.from(this.objects), this.markerData);
             }, 1000 / this.targetFps);
         }
     }
@@ -229,6 +231,7 @@ export class SimController {
                     this.inputValues.mouseLeftDown = true;
                     this.markerData.position = this.camera.convertRasterCoordToWorld(this.inputValues.mousePos);
                     this.markerData.readyToCreate = true;
+                    break;
                 case 1:
                     this.inputValues.mouseMiddleDown = true;
                     break;
