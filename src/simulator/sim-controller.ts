@@ -14,6 +14,7 @@ export class SimController {
     objects: Set<Planet>;
     maxTrailLength: number = 300;
     canvas: HTMLCanvasElement;
+    timerId?: number;
 
     cameraStartingPos: Vector2;
     camera: Camera;
@@ -188,7 +189,7 @@ export class SimController {
             console.log("running");
             this.simRunning = true;
             var lastTimestamp = performance.now();
-            setInterval(() => {
+            this.timerId = setInterval(() => {
                 var curTimestamp = performance.now();
                 this.realFps = 1000 / (curTimestamp - lastTimestamp);
                 lastTimestamp = curTimestamp;
@@ -207,6 +208,10 @@ export class SimController {
                 this.camera.render(Array.from(this.objects), this.markerData);
             }, 1000 / this.targetFps);
         }
+    }
+
+    destroy() {
+        clearInterval(this.timerId);
     }
 
     private getMousePosition(event: MouseEvent) {
