@@ -1,5 +1,5 @@
-import { Color } from "./color.js";
-import { Vector2 } from "./vector.js";
+import { Color } from "./color";
+import { Vector2 } from "./vector";
 
 export class Planet {
     name: string;

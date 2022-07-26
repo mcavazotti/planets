@@ -1,5 +1,5 @@
-import { Planet } from "./planet.js";
-import { Vector2 } from "./vector.js";
+import { Planet } from "./planet";
+import { Vector2 } from "./vector";
 
 const gravitationalConstant = 6.674 * 1e-11;
 const elasticCoefficient = 0.95;

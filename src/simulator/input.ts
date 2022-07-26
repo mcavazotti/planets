@@ -1,4 +1,4 @@
-import { Vector2 } from "./vector.js";
+import { Vector2 } from "./vector";
 
 interface Marker {
     maxRadius: number;
