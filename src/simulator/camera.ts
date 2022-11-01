@@ -6,7 +6,7 @@ import { Vector2 } from "./vector";
 export class Camera {
     position: Vector2;
     renderTrail: boolean = true;
-    renderHelp: boolean = false;
+    renderHelp: boolean = true;
     renderBg: boolean = true;
     renderUI: boolean = true;
     frustrumWidth: number = 1000;
