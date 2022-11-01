@@ -14,7 +14,7 @@ export class SimController {
     objects: Set<Planet>;
     maxTrailLength: number = 300;
     canvas: HTMLCanvasElement;
-    timerId?: number;
+    timerId?: NodeJS.Timer;
 
     cameraStartingPos: Vector2;
     camera: Camera;
