@@ -56,7 +56,7 @@ export class SimController {
         console.log("cam init")
 
         this.resetSim();
-        this.camera.render(Array.from(this.objects), this.markerData);
+        this.camera.render(Array.from(this.objects), this.markerData, this.simData);
 
         this.canvas.addEventListener('mousemove', this.getMousePosition.bind(this));
         this.canvas.addEventListener('mousedown', this.getMouseDown.bind(this));
@@ -205,7 +205,7 @@ export class SimController {
                     this.updateObjects();
                 }
                 this.camera.clear();
-                this.camera.render(Array.from(this.objects), this.markerData);
+                this.camera.render(Array.from(this.objects), this.markerData, this.simData);
             }, 1000 / this.targetFps);
         }
     }

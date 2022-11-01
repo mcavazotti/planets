@@ -1,6 +1,7 @@
 import { Color } from "./color";
 import { Marker } from "./input";
 import { Planet } from "./planet";
+import { SimData } from "./sim-data";
 import { Vector2 } from "./vector";
 export class Camera {
     position: Vector2;
@@ -50,7 +51,7 @@ export class Camera {
         this.canvasContext.clearRect(0, 0, this.canvasSize.x, this.canvasSize.y);
     }
 
-    render(objects: Planet[], marker: Marker) {
+    render(objects: Planet[], marker: Marker, simData: SimData) {
         if (this.renderBg) {
             console.log("renderBG")
             this.canvasContext.fillStyle = this.bgColor.hex;
@@ -66,14 +67,19 @@ export class Camera {
         if (this.renderUI) {
             this.renderSegments(marker.direction, new Color('#ff3838aa'));
             this.renderCircle(marker.position, marker.radius, new Color('#ff3838aa'));
-            this.helpMessage();
+            this.helpMessage(simData.bounce);
 
             this.canvasContext.fillStyle = '#ffffffcc';
-            this.canvasContext.font = 'bold 14px Courier New';
+            this.canvasContext.font = 'bold 16px Courier New';
             this.canvasContext.fillText("New object info", 20, this.canvasSize.y - 35);
-            this.canvasContext.font = '12px Courier New';
+            this.canvasContext.font = '14px Courier New';
             this.canvasContext.fillText("Radius: " + marker.radius.toPrecision(4) + " km", 20, this.canvasSize.y - 20);
             this.canvasContext.fillText("Density: " + marker.density.toPrecision(4) + " kg/m^3", 20, this.canvasSize.y - 10);
+        }
+        if (simData.paused) {
+            this.canvasContext.fillStyle = '#ffffffcc';
+            this.canvasContext.font = 'bold 20px Courier New';
+            this.canvasContext.fillText("Paused", this.canvasSize.x - 100, 30)
         }
     }
 
@@ -102,7 +108,7 @@ export class Camera {
         this.canvasContext.fill();
     }
 
-    private helpMessage() {
+    private helpMessage(bounce?: boolean) {
         var controls = [
             "<comma>/<period>           speed up/down simulation",
             "<left click> + drag        create object",
@@ -114,15 +120,15 @@ export class Camera {
             "<Z> + scroll               change radius of new object",
             "<X> + scroll               change density of new object",
             "<C>                        reset radius and density",
-            "<B>                        toggle bounce " /*+ (.bounce ? "off": "on")*/,
+            "<B>                        toggle bounce " + (bounce ? "off" : "on"),
             "<H>                        hide Controls",
         ];
 
         this.canvasContext.fillStyle = '#ffffffcc';
         if (this.renderHelp) {
-            this.canvasContext.font = 'bold 16px Courier New';
+            this.canvasContext.font = 'bold 18px Courier New';
             this.canvasContext.fillText("Controls:", 10, 20);
-            this.canvasContext.font = 'lighter 11px Courier New';
+            this.canvasContext.font = 'lighter 13px Courier New';
             for (let i = 0; i < controls.length; i++) {
                 this.canvasContext.fillText(controls[i], 10, 35 + i * 15)
             }
