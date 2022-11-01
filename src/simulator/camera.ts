@@ -42,7 +42,7 @@ export class Camera {
 
     convertRasterCoordToWorld(coord: Vector2): Vector2 {
         const cameraSpacePos = new Vector2((coord.x - this.canvasSize.x / 2) / (this.canvasSize.x / 2), (coord.y - this.canvasSize.y / 2) / (this.canvasSize.y / 2));
-        const camRelativeOffset = cameraSpacePos.mult((new Vector2(this.frustrumWidth, this.frustrumHeight)).scale(1/this.zoom));
+        const camRelativeOffset = cameraSpacePos.mult((new Vector2(this.frustrumWidth, this.frustrumHeight)).scale(1 / this.zoom));
         return new Vector2(this.position.x + camRelativeOffset.x, this.position.y - camRelativeOffset.y);
     }
 
@@ -66,6 +66,14 @@ export class Camera {
         if (this.renderUI) {
             this.renderSegments(marker.direction, new Color('#ff3838aa'));
             this.renderCircle(marker.position, marker.radius, new Color('#ff3838aa'));
+            this.helpMessage();
+
+            this.canvasContext.fillStyle = '#ffffffcc';
+            this.canvasContext.font = 'bold 14px Courier New';
+            this.canvasContext.fillText("New object info", 20, this.canvasSize.y - 35);
+            this.canvasContext.font = '12px Courier New';
+            this.canvasContext.fillText("Radius: " + marker.radius.toPrecision(4) + " km", 20, this.canvasSize.y - 20);
+            this.canvasContext.fillText("Density: " + marker.density.toPrecision(4) + " kg/m^3", 20, this.canvasSize.y - 10);
         }
     }
 
@@ -92,5 +100,35 @@ export class Camera {
         this.canvasContext.beginPath();
         this.canvasContext.arc(transformedCenter.x, transformedCenter.y, realRadius, 0, 2 * Math.PI);
         this.canvasContext.fill();
+    }
+
+    private helpMessage() {
+        var controls = [
+            "<comma>/<period>           speed up/down simulation",
+            "<left click> + drag        create object",
+            "<T>                        toggle " + (this.renderTrail ? "off" : "on") + " trail",
+            "<P>                        pause simulation",
+            "<Q>                        reset camera position",
+            "<R>                        reset simulation",
+            "<W>/<A>/<S>/<D>            move camera",
+            "<Z> + scroll               change radius of new object",
+            "<X> + scroll               change density of new object",
+            "<C>                        reset radius and density",
+            "<B>                        toggle bounce " /*+ (.bounce ? "off": "on")*/,
+            "<H>                        hide Controls",
+        ];
+
+        this.canvasContext.fillStyle = '#ffffffcc';
+        if (this.renderHelp) {
+            this.canvasContext.font = 'bold 16px Courier New';
+            this.canvasContext.fillText("Controls:", 10, 20);
+            this.canvasContext.font = 'lighter 11px Courier New';
+            for (let i = 0; i < controls.length; i++) {
+                this.canvasContext.fillText(controls[i], 10, 35 + i * 15)
+            }
+        } else {
+            this.canvasContext.font = 'lighter 11px Courier New';
+            this.canvasContext.fillText("Press <H> to show Controls", 10, 20);
+        }
     }
 } 
